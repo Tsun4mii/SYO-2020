@@ -7,8 +7,8 @@
 #include "LT.h"
 #include "LexAn.h"
 //#include "Polish.h"
-//#include "MFST.h"
-//#include "Greibach.h"
+#include "MFST.h"
+#include "Greibach.h"
 
 #define EXP1 16
 
@@ -27,9 +27,8 @@ int wmain(int argc, wchar_t* argv[])
 		In::IN in = In::getin(parm);
 		Log:WriteIn(log, in);
 		Lex::LEX lex = Lex::lexAnaliz(log, in);
-		IT::showTable(lex.idtable);
-		/*MFST_TRACE_START
-			unsigned int start_time = clock();
+		MFST_TRACE_START
+		unsigned int start_time = clock();
 		MFST::Mfst mfst(lex.lextable, GRB::getGreibach());
 		mfst.start();
 		unsigned int end_time = clock();
@@ -37,11 +36,9 @@ int wmain(int argc, wchar_t* argv[])
 		std::cout << search_time << std::endl;
 		mfst.savededucation();
 		mfst.printrules();
-		PolishStart(lex);*/
+		IT::showTable(lex.idtable);
 		LT::showTable(lex.lextable, parm);
 		Log::Close(log);
-
-
 	}
 	catch (Error::ERROR e)
 	{

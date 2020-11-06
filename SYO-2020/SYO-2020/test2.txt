@@ -1,0 +1,38 @@
+number func fb(number t, number n)
+[
+  t = n + 5;
+  condition: t < 3 #
+  cycle [
+   print ' ';
+   t = t + 1;
+  ] #
+  return t;
+]
+number func fc(number p)
+[
+  new number s = q232;
+  p = p + s;
+  p = sqroot(p);
+  return p;
+]
+main
+[
+  new number z;
+  new number x = 100;
+  x = x + q113;
+  new number y;
+  y = abs(x);
+  new text a;
+  a = 'привет мир';
+  condition: y < 150 #
+  cycle [
+   print y;
+   y = y + 1;
+  ] #
+  z = sqroot(y);
+  print a;
+  new text sb = '123456798';
+  new text sc;
+  sc = '123456798';
+]
+

@@ -79,6 +79,7 @@ namespace IT
 			case F: std::cout << std::setw(18) << std::left << "функция" << " | "; break;
 			case P: std::cout << std::setw(18) << std::left << "параметр" << " | "; break;
 			case L: std::cout << std::setw(18) << std::left << "литерал" << " | "; break;
+			case SF:  std::cout << std::setw(18) << std::left << "стандартная функция" << " | "; break;
 			case OP: std::cout << std::setw(18) << std::left << "оператор" << " | ";
 				numberOP++;
 				break;

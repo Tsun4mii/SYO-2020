@@ -2,6 +2,8 @@ number func fi(number x, number y)
 [
 new number z;
 z= x*(x+y);
+z = sqroot(z);
+z = abs(z);
 return z; 
 ];
 text func fs (boolean a, text b)
@@ -18,6 +20,7 @@ new number x;
 new number y;
 new number z;
 z = q232;
+y = abs(z);
 new boolean m;
 new text sa;
 new text sb;
@@ -25,13 +28,15 @@ new text sc;
 new number func strlen(text p);
 x = 1;
 y = 5;
-condition: x ! 3 #
+z = sqroot(x + y);
+condition: x } 3 #
 cycle
 [ 
 x+y;
 ] #
 sa = '1234567890';
 sb = '1234567890'; 
+z = sqroot(x);
 z = fi(y);
 sc = fs(sa,sb);
 print 'контрольный пример';
