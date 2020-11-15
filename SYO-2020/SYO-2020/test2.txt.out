@@ -1,27 +1,26 @@
-tfi(ti,ti)[i=ivl;
+tfi(ti,ti)[i=lil+*  ;
 ?i<l#
-c[pl;
-i=ivl;
+c[i=il+;
 ]#
 ri;
 ]tfi(ti)[nti=l;
-i=ivi;
-i=i(i);
+i=ii+;
+i=i@1 ;
 ri;
-]m()[nti;
+]m[nti;
 nti=l;
-i=ivl;
-nti;
-i=i(i);
+i=il+;
+nti=l;
 nti;
 i=l;
 ?i<l#
 c[pi;
-i=ivl;
+i=il+;
 ]#
-i=i(i);
+i=i@1 ;
 pi;
 nti=l;
 nti;
 i=l;
+pi;
 ]

@@ -9,6 +9,9 @@
 //#include "Polish.h"
 #include "MFST.h"
 #include "Greibach.h"
+#include "Polish.h"
+#include "SemAn.h"
+#include"Generator.h"
 
 #define EXP1 16
 
@@ -36,8 +39,13 @@ int wmain(int argc, wchar_t* argv[])
 		std::cout << search_time << std::endl;
 		mfst.savededucation();
 		mfst.printrules();
+		//bool sem_ok = Semantic::semanticsCheck(lex, log);
+		//if (!sem_ok)
+		//	exit;
 		IT::showTable(lex.idtable);
+		PolishStart(lex);
 		LT::showTable(lex.lextable, parm);
+		Gen::CodeGeneration(lex);
 		Log::Close(log);
 	}
 	catch (Error::ERROR e)

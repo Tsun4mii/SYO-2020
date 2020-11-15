@@ -21,13 +21,13 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{a2c1a9c8-1a90-43ae-8ed6-4ad998f16546}</ProjectGuid>
-    <RootNamespace>SYO2020</RootNamespace>
+    <ProjectGuid>{8cb187d7-c46c-4445-bcef-308b9f2f7398}</ProjectGuid>
+    <RootNamespace>GenLib</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -139,40 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Div.cpp" />
-    <ClCompile Include="Error.cpp" />
-    <ClCompile Include="FST.cpp" />
-    <ClCompile Include="Generator.cpp" />
-    <ClCompile Include="Greibach.cpp" />
-    <ClCompile Include="In.cpp" />
-    <ClCompile Include="IT.cpp" />
-    <ClCompile Include="LexAn.cpp" />
-    <ClCompile Include="Log.cpp" />
-    <ClCompile Include="LT.cpp" />
-    <ClCompile Include="MFST.cpp" />
-    <ClCompile Include="Parm.cpp" />
-    <ClCompile Include="Polish.cpp" />
-    <ClCompile Include="SemAn.cpp" />
-    <ClCompile Include="SYO-2020.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Div.h" />
-    <ClInclude Include="Error.h" />
-    <ClInclude Include="FST.h" />
-    <ClInclude Include="Generator.h" />
-    <ClInclude Include="Graphs.h" />
-    <ClInclude Include="Greibach.h" />
-    <ClInclude Include="In.h" />
-    <ClInclude Include="IT.h" />
-    <ClInclude Include="LexAn.h" />
-    <ClInclude Include="Log.h" />
-    <ClInclude Include="LT.h" />
-    <ClInclude Include="MFST.h" />
-    <ClInclude Include="Parm.h" />
-    <ClInclude Include="Polish.h" />
-    <ClInclude Include="Rule.h" />
-    <ClInclude Include="SemAn.h" />
-    <ClInclude Include="stdafx.h" />
+    <ClCompile Include="GenLib.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

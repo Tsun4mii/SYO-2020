@@ -440,19 +440,67 @@ namespace Lex
 				IT::Add(idtable, entryIT);
 				continue;
 			}
-			FST::FST fstOperator(word[i], FST_OPERATOR);
-			if (FST::execute(fstOperator))
+			//FST::FST fstOperator(word[i], FST_OPERATOR);
+			//if (FST::execute(fstOperator))
+			//{
+			//	LT::Entry entryLT = writeEntry(entryLT, LEX_OPERATOR, indexID++, line);
+			//	switch (word[i][0])
+			//	{
+			//	case PLUS: case MINUS:
+			//		entryLT.priority = 2;
+			//		break;
+			//	case DIRSLASH: case STAR:
+			//		entryLT.priority = 3;
+			//		break;
+			//	}
+			//	LT::Add(lextable, entryLT);
+			//	strcpy(entryIT.id, word[i]);
+			//	entryIT.idxfirstLE = indxLex;
+			//	entryIT.idtype = IT::OP;
+			//	IT::Add(idtable, entryIT);
+			//	continue;
+			//}
+			FST::FST fstPlus(word[i], FST_PLUS);
+			if (FST::execute(fstPlus))
 			{
-				LT::Entry entryLT = writeEntry(entryLT, LEX_OPERATOR, indexID++, line);
-				switch (word[i][0])
-				{
-				case PLUS: case MINUS:
-					entryLT.priority = 2;
-					break;
-				case DIRSLASH: case STAR:
-					entryLT.priority = 3;
-					break;
-				}
+				LT::Entry entryLT = writeEntry(entryLT, LEX_PLUS, indexID++, line);
+				entryLT.priority = 2;
+				LT::Add(lextable, entryLT);
+				strcpy(entryIT.id, word[i]);
+				entryIT.idxfirstLE = indxLex;
+				entryIT.idtype = IT::OP;
+				IT::Add(idtable, entryIT);
+				continue;
+			}
+			FST::FST fstMinus(word[i], FST_MINUS);
+			if (FST::execute(fstMinus))
+			{
+				LT::Entry entryLT = writeEntry(entryLT, LEX_MINUS, indexID++, line);
+				entryLT.priority = 2;
+				LT::Add(lextable, entryLT);
+				strcpy(entryIT.id, word[i]);
+				entryIT.idxfirstLE = indxLex;
+				entryIT.idtype = IT::OP;
+				IT::Add(idtable, entryIT);
+				continue;
+			}
+			FST::FST fstStar(word[i], FST_STAR);
+			if (FST::execute(fstStar))
+			{
+				LT::Entry entryLT = writeEntry(entryLT, LEX_STAR, indexID++, line);
+				entryLT.priority = 3;
+				LT::Add(lextable, entryLT);
+				strcpy(entryIT.id, word[i]);
+				entryIT.idxfirstLE = indxLex;
+				entryIT.idtype = IT::OP;
+				IT::Add(idtable, entryIT);
+				continue;
+			}
+			FST::FST fstDir(word[i], FST_DIRSLASH);
+			if (FST::execute(fstPlus))
+			{
+				LT::Entry entryLT = writeEntry(entryLT, LEX_DIRSLASH, indexID++, line);
+				entryLT.priority = 3;
 				LT::Add(lextable, entryLT);
 				strcpy(entryIT.id, word[i]);
 				entryIT.idxfirstLE = indxLex;

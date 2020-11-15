@@ -1,10 +1,9 @@
 number func fb(number t, number n)
 [
-  t = n + 5;
-  condition: t < 3 #
+  t = 3 * (n + 5);
+  condition: t < 20 #
   cycle [
-   print ' ';
-   t = t + 1;
+   t = t + 2;
   ] #
   return t;
 ]
@@ -20,19 +19,19 @@ main
   new number z;
   new number x = 100;
   x = x + q113;
-  new number y;
-  y = abs(x);
+  new number y = 3;
   new text a;
-  a = 'привет мир';
+  a = 'hello world';
   condition: y < 150 #
   cycle [
    print y;
-   y = y + 1;
+   y = y + 10;
   ] #
   z = sqroot(y);
   print a;
   new text sb = '123456798';
   new text sc;
   sc = '123456798';
+  print y;
 ]
 

@@ -134,8 +134,11 @@ namespace GRB
 			Rule::Chain(1, TS('{'))
 		),
 
-		Rule(NS('A'), GRB_ERROR_SERIES + 11, 1,					// Неверный арифметический оператор
-			Rule::Chain(1, TS('v'))
+		Rule(NS('A'), GRB_ERROR_SERIES + 11, 4,					// Неверный арифметический оператор
+			Rule::Chain(1, TS('+')),
+			Rule::Chain(1, TS('-')),
+			Rule::Chain(1, TS('*')),
+			Rule::Chain(1, TS('/'))
 		),
 
 		Rule(NS('V'), GRB_ERROR_SERIES + 12, 2,					// Неверное выражение. Ожидаются только идентификаторы и литералы

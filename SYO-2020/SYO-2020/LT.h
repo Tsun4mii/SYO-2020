@@ -19,10 +19,10 @@
 #define LEX_BRACELET	']'	// лексема для }
 #define LEX_LEFTTHESIS	'('	// лексема для (
 #define LEX_RIGHTTHESIS	')'	// лексема для )
-#define LEX_PLUS		'v'	// лексема для +
-#define LEX_MINUS		'v'	// лексема для -
-#define LEX_STAR		'v'	// лексема для *
-#define LEX_DIRSLASH	'v'	// лексема для /
+#define LEX_PLUS		'+'	// лексема для +		Изменены знаки для след. операторов + - * /
+#define LEX_MINUS		'-'	// лексема для -
+#define LEX_STAR		'*'	// лексема для *
+#define LEX_DIRSLASH	'/'	// лексема для /
 #define LEX_OPERATOR	'v'	// лексема для операторов
 #define LEX_EQUAL		'='
 #define LEX_CYCLE		'c'
