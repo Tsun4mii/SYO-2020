@@ -6,10 +6,66 @@
 #include <vector>
 #include <sstream>
 #include <iostream>
+#include <stack>
 using namespace std;
 
 static int conditionnum = 0;
 string itoS(int x) { stringstream r;  r << x;  return r.str(); }
+string genCallFunctionCode(Lex::LEX& tables, int i)
+{
+	/*string str;
+
+	IT::Entry e = ITENTRY(i);
+	stack<IT::Entry> temp;
+	bool stnd = (e.idtype == IT::IDTYPE::SF);
+
+	for (int k = i - j; k < i; k++)
+	{
+		if (LEXEMA(k) == LEX_ID || LEXEMA(k) == LEX_LITERAL)
+			temp.push(ITENTRY(k));
+	}
+
+	while (!temp.empty())
+	{
+		if (temp.top().idtype == IT::IDTYPE::L && temp.top().iddatatype == IT::IDDATATYPE::STR)
+			str = str + "push offset " + temp.top().id + "\n";
+		else   str = str + "push " + temp.top().id + "\n";
+		temp.pop();
+	}
+	if (stnd)
+		str += "push offset buffer\n";
+	str = str + "call " + string(e.id) + IN_CODE_ENDL;
+	return str;*/
+	string str;
+
+	IT::Entry e = ITENTRY(i); // идентификатор вызываемой функции
+	stack <IT::Entry> temp;
+	bool stnd = (e.idtype == IT::IDTYPE::SF);
+
+	for (int j = i + 1; LEXEMA(j) != (LEX_RIGHTTHESIS); j++)
+	{
+		if (LEXEMA(j) == LEX_ID || LEXEMA(j) == LEX_LITERAL)
+			temp.push(ITENTRY(j)); // // заполняем стек в прямом порядке	
+	}
+	str += "\n";
+
+	// раскручиваем стек
+	while (!temp.empty())
+	{
+		if (temp.top().idtype == IT::IDTYPE::L && temp.top().iddatatype == IT::IDDATATYPE::STR)
+			str = str + "push offset " + temp.top().id + "\n";
+		else   str = str + "push " + temp.top().id + "\n";
+		temp.pop();
+	}
+
+	/*if (stnd)
+		str += "push offset buffer\n";*/
+	str = str + "call " + string(e.id) + IN_CODE_ENDL;
+	// выравниваниe стека
+	/*if (e.value.params.count != 0) str = str + "add esp, " + itoS(4 * e.value.params.count + 4) + "\n";*/
+
+	return str;
+}
 string genConditionCode(Lex::LEX& tables, int i, string& cyclecode)
 {
 	string str;
@@ -133,9 +189,9 @@ string genEqualCode(Lex::LEX& tables, int i)
 			case LEX_LITERAL:
 			case LEX_ID:
 			{
-				if (ITENTRY(j).idtype == IT::IDTYPE::F) // если в выражении вызов функции
+				if (ITENTRY(j).idtype == IT::IDTYPE::F || ITENTRY(j).idtype == IT::IDTYPE::SF) // если в выражении вызов функции
 				{
-					//str = str + genCallFuncCode(tables, log, j); // функция возвращает результат в eax
+					str = str + genCallFunctionCode(tables, j); // функция возвращает результат в eax
 					str = str + "push eax\n";				// результат выражения в стек для дальнейшего вычисления выражения
 					while (LEXEMA(j) != LEX_RIGHTTHESIS) j++;
 					break;
@@ -188,6 +244,7 @@ namespace Gen
 		string funcname;	// имя текущей функции
 		string cyclecode;	// эпилог цикла: cmp + j
 		int pcount;			// количество параметров текущей функции
+		int pos, parcol;
 		string str;
 		for (int i = 0; i < tables.lextable.size; i++)
 		{
@@ -249,11 +306,18 @@ namespace Gen
 					else  str = str + "\npush " + e.id + "\ncall outstr\n";
 					break;
 				}
+				str = str + "\n";
 				break;
 			}
 			case LEX_CYCLE: // цикл с условием (метка)
 			{
 				str = str + "cycle" + itoS(conditionnum) + ":";
+				break;
+			}
+			case LEX_ID:
+			{
+				if (LEXEMA(i + 1) == LEX_LEFTTHESIS && LEXEMA(i - 1) != LEX_FUNCTION) // не объявление, а вызов
+					str = genCallFunctionCode(tables, i);
 				break;
 			}
 			}

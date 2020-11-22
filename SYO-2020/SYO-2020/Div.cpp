@@ -16,6 +16,8 @@ char** divideText(char source[], int size)		// формирование массива строк, состо
 			findLit = !findLit;
 		for (int t = 0; t < sizeof(SP) - 1; t++)
 		{
+			if (source[i] == '-' && source[i - 1] == '=')
+				break;
 			if (source[i] == SP[t] && !findLit)
 			{
 				findSP = true;

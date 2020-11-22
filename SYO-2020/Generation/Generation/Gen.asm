@@ -11,6 +11,8 @@ ExitProcess PROTO:DWORD
 
  outstr PROTO : DWORD
 
+ sqroot PROTO : DWORD
+
 .const
 		newline byte 13, 10, 0
 		L1 sdword 3
@@ -19,11 +21,12 @@ ExitProcess PROTO:DWORD
 		L4 sdword 2
 		L5 sdword 154
 		L6 sdword 100
-		L7 sdword 75
+		L7 sdword -75
 		L8 byte 'hello world', 0
 		L9 sdword 150
-		L10 sdword 10
-		L11 byte '123456798', 0
+		L10 byte ' ', 0
+		L11 sdword 10
+		L12 byte '123456798', 0
 .data
 		temp sdword ?
 		buffer byte 256 dup(0)
@@ -31,6 +34,7 @@ ExitProcess PROTO:DWORD
 		mainz sdword 0
 		mainx sdword 0
 		mainy sdword 0
+		mainf sdword 0
 		maina dword ?
 		mainsb dword ?
 		mainsc dword ?
@@ -111,7 +115,10 @@ push eax
 pop ebx
 mov fcp, ebx
 
+
 push fcp
+call sqroot
+push eax
 
 pop ebx
 mov fcp, ebx
@@ -133,20 +140,15 @@ push L6
 pop ebx
 mov mainx, ebx
 
-push mainx
-push L7
-pop ebx
-pop eax
-add eax, ebx
-push eax
-
-pop ebx
-mov mainx, ebx
-
 push L1
 
 pop ebx
 mov mainy, ebx
+
+push L7
+
+pop ebx
+mov mainf, ebx
 
 mov maina, offset L8
 mov edx, mainy
@@ -156,11 +158,17 @@ jl cycle2
 jmp cyclenext2
 cycle2:
 
+push offset L10
+call outstr
+
+
+
 push mainy
 call outnum
 
+
 push mainy
-push L10
+push L11
 pop ebx
 pop eax
 add eax, ebx
@@ -174,7 +182,19 @@ cmp edx, L9
 
 jl cycle2
 cyclenext2:
+
+push mainx
+call sqroot
+push eax
+
+pop ebx
+mov mainz, ebx
+
+
 push mainy
+push mainx
+call fb
+push eax
 
 pop ebx
 mov mainz, ebx
@@ -183,11 +203,28 @@ mov mainz, ebx
 push maina
 call outstr
 
-mov mainsb, offset L11
-mov mainsc, offset L11
+
+mov mainsb, offset L12
+mov mainsc, offset L12
 
 push mainy
 call outnum
+
+
+
+push offset L10
+call outstr
+
+
+
+push mainz
+call outnum
+
+
+
+push mainf
+call outnum
+
 
 push 0
 call ExitProcess

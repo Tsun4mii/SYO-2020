@@ -18,4 +18,9 @@ extern "C"
 			std::cout << ptr[i];
 		return 0;
 	}
+
+	int _stdcall sqroot(int i)
+	{
+		return (int)std::sqrt(i);
+	}
 }

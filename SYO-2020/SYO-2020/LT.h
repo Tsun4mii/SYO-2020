@@ -34,6 +34,7 @@
 #define LEX_LESS		'<'
 #define LEX_NOT			'!'
 #define LEX_BOOL		't'
+#define LEX_CALL		'^'
 
 namespace LT {
 	struct Entry {

@@ -18,20 +18,25 @@ main
 [
   new number z;
   new number x = 100;
-  x = x + q113;
   new number y = 3;
+  new number f = -75;
   new text a;
   a = 'hello world';
   condition: y < 150 #
   cycle [
+   print ' ';
    print y;
    y = y + 10;
   ] #
-  z = sqroot(y);
+  z = sqroot(x);
+  z = fb(x, y);
   print a;
   new text sb = '123456798';
   new text sc;
   sc = '123456798';
   print y;
+  print ' ';
+  print z;
+  print f;
 ]
 
