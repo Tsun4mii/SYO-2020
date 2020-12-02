@@ -166,6 +166,10 @@
 	FST::NODE(1, FST::RELATION('*', 1)),\
 	FST::NODE()
 
+#define FST_IFEQ 2,	\
+	FST::NODE(1, FST::RELATION('&', 1)),\
+	FST::NODE()
+
 #define FST_DIRSLASH 2,	\
 	FST::NODE(1, FST::RELATION('/', 1)),\
 	FST::NODE()
@@ -251,10 +255,13 @@
     FST::NODE(8, FST::RELATION('0', 4), FST::RELATION('1', 4), FST::RELATION('2', 4), FST::RELATION('3', 4), FST::RELATION('4', 4), FST::RELATION('5', 4), FST::RELATION('6', 4), FST::RELATION('7', 4)),\
     FST::NODE()
 
-#define FST_ABS 4, \
-	FST::NODE(1, FST::RELATION('a', 1)), \
-	FST::NODE(1, FST::RELATION('b', 2)), \
-	FST::NODE(1, FST::RELATION('s', 3)), \
+#define FST_MOD 7, \
+	FST::NODE(1, FST::RELATION('m', 1)), \
+	FST::NODE(1, FST::RELATION('o', 2)), \
+	FST::NODE(1, FST::RELATION('d', 3)), \
+	FST::NODE(1, FST::RELATION('u', 4)), \
+	FST::NODE(1, FST::RELATION('l', 5)), \
+	FST::NODE(1, FST::RELATION('e', 6)), \
 	FST::NODE()
 
 #define FST_SQROOT 7, \

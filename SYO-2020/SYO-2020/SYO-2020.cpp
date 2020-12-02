@@ -39,12 +39,18 @@ int wmain(int argc, wchar_t* argv[])
 		std::cout << search_time << std::endl;
 		mfst.savededucation();
 		mfst.printrules();
-		//bool sem_ok = Semantic::semanticsCheck(lex, log);
-		//if (!sem_ok)
-		//	exit;
+		bool sem_ok = Semantic::semanticsCheck(lex, log);
+		if (!sem_ok)
+		{
+			std::cout << "Ошибка семантического анализа" << std::endl;
+		}
 		IT::showTable(lex.idtable);
 		PolishStart(lex);
 		LT::showTable(lex.lextable, parm);
+		for (int i = 0; i < lex.idtable.size; i++)
+		{
+				std::cout << lex.idtable.table[i].countOfPar;
+		}
 		Gen::CodeGeneration(lex);
 		Log::Close(log);
 	}

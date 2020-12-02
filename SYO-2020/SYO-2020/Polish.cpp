@@ -153,12 +153,6 @@ bool PolishNotation(int i, Lex::LEX& lex)
 		}
 		case LEX_RIGHTTHESIS:	// если )
 		{
-			//if (findFunc) 
-			//{
-			//	stack.push(num);
-			//	stack.push(func);
-			//	findFunc = false;
-			//}
 			if (findFunc)
 				queue.push(lex.lextable.table[i]);
 			else {

@@ -86,6 +86,7 @@ string genConditionCode(Lex::LEX& tables, int i, string& cyclecode)
 	case LEX_MORE:  rstr = "jg";  wstr = "jl";  break;
 	case LEX_LESS:   rstr = "jl";  wstr = "jg";  break;
 	case LEX_NOT:   rstr = "jnz";  wstr = "jz";  break;
+	case LEX_IFEQ:    rstr = "jz";  wstr = "jnz";  break;
 	}
 
 	if (!c && r) str = str + "\n" + rstr + " right" + char(conditionnum + '0');

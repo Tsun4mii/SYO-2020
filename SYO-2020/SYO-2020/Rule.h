@@ -126,12 +126,13 @@ namespace GRB
 			Rule::Chain(3, TS('l'), NS('L'), TS('i'))
 		),
 
-		Rule(NS('L'), GRB_ERROR_SERIES + 10, 5,					// Неверный условный оператор		
+		Rule(NS('L'), GRB_ERROR_SERIES + 10, 6,					// Неверный условный оператор		
 			Rule::Chain(1, TS('<')),
 			Rule::Chain(1, TS('>')),
 			Rule::Chain(1, TS('!')),
 			Rule::Chain(1, TS('}')),
-			Rule::Chain(1, TS('{'))
+			Rule::Chain(1, TS('{')),
+			Rule::Chain(1, TS('&'))
 		),
 
 		Rule(NS('A'), GRB_ERROR_SERIES + 11, 4,					// Неверный арифметический оператор

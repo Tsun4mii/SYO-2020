@@ -26,7 +26,7 @@ main
   cycle [
    print ' ';
    print y;
-   y = y + 10;
+   y = y + 15;
   ] #
   z = sqroot(x);
   z = fb(x, y);
@@ -34,6 +34,8 @@ main
   new text sb = '123456798';
   new text sc;
   sc = '123456798';
+  y = y / 2;
+  f = module(f);
   print y;
   print ' ';
   print z;

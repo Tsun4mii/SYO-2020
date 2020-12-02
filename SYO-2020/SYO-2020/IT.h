@@ -19,6 +19,7 @@ namespace IT			// таблица идентификаторов
 		IDDATATYPE	iddatatype;			// тип данных
 		IDTYPE		idtype;				// тип идентификатора
 		int countOfPar = 0;
+		IDDATATYPE* types;
 		union
 		{
 			int vint;					// значение integer

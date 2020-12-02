@@ -10,6 +10,7 @@ extern "C"
 
 	int __stdcall outstr(char* ptr)
 	{
+		setlocale(LC_ALL, "RUSSIAN");
 		if (ptr == nullptr)
 		{
 			std::cout << std::endl;
@@ -22,5 +23,10 @@ extern "C"
 	int _stdcall sqroot(int i)
 	{
 		return (int)std::sqrt(i);
+	}
+
+	int _stdcall module(int i)
+	{
+		return (int)std::fabs(i);
 	}
 }

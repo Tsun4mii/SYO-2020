@@ -21,6 +21,7 @@
 #define EXTERN "\n outnum PROTO : DWORD\n"\
 "\n outstr PROTO : DWORD\n"\
 "\n sqroot PROTO : DWORD\n"\
+"\n module PROTO : DWORD\n"\
 
 #define END "push 0\ncall ExitProcess\nmain ENDP\nend main"
 

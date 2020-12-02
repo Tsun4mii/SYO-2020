@@ -6,6 +6,7 @@
 #define LT_TI_NULLIDX	0xfffffff	// нет элемента таблицы идентификаторов
 #define LEX_NUMBER		't'	// лексема для integer
 #define LEX_STRING		't'	// лексема для string
+#define LEX_TYPE		't'
 #define LEX_ID			'i'	// лексема для идентификатора
 #define LEX_LITERAL		'l'	// лексема для литерала
 #define LEX_FUNCTION	'f'	// лексема для function
@@ -35,6 +36,7 @@
 #define LEX_NOT			'!'
 #define LEX_BOOL		't'
 #define LEX_CALL		'^'
+#define LEX_IFEQ		'&'
 
 namespace LT {
 	struct Entry {

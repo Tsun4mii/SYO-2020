@@ -13,6 +13,8 @@ ExitProcess PROTO:DWORD
 
  sqroot PROTO : DWORD
 
+ module PROTO : DWORD
+
 .const
 		newline byte 13, 10, 0
 		L1 sdword 3
@@ -25,7 +27,7 @@ ExitProcess PROTO:DWORD
 		L8 byte 'hello world', 0
 		L9 sdword 150
 		L10 byte ' ', 0
-		L11 sdword 10
+		L11 sdword 15
 		L12 byte '123456798', 0
 .data
 		temp sdword ?
@@ -206,6 +208,25 @@ call outstr
 
 mov mainsb, offset L12
 mov mainsc, offset L12
+push mainy
+push L4
+pop ebx
+pop eax
+cdq
+idiv ebx
+push eax
+
+pop ebx
+mov mainy, ebx
+
+
+push mainf
+call module
+push eax
+
+pop ebx
+mov mainf, ebx
+
 
 push mainy
 call outnum
