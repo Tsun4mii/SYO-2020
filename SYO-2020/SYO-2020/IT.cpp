@@ -2,6 +2,7 @@
 #include "IT.h"
 #include "Error.h"
 #include<iomanip>
+using namespace std;
 
 namespace IT
 {
@@ -44,12 +45,12 @@ namespace IT
 	{
 		delete[] idtable.table;
 	}
-	void showTable(IdTable& idtable)
+	void showTable(IdTable& idtable, ofstream* stream)
 	{
 		int i, j, numberOP = 0;
-		std::cout << std::setfill('-') << std::setw(87) << '-' << std::endl;
-		std::cout << "   №" << " | " << "Идентификатор" << " | " << "Тип данных" << " | " << "Тип идентификатора" << " | " << "Индекс в ТЛ" << " | " << "Значение    " << std::endl;
-		std::cout << std::setw(87) << '-' << std::endl;
+		*stream << std::setfill('-') << std::setw(87) << '-' << std::endl;
+		*stream << "   №" << " | " << "Идентификатор" << " | " << "Тип данных" << " | " << "Тип идентификатора" << " | " << "Индекс в ТЛ" << " | " << "Значение    " << std::endl;
+		*stream << std::setw(87) << '-' << std::endl;
 		for (i = 0, j = 0; i < idtable.size; i++, j++)
 		{
 			if (idtable.table[i].idtype == OP) 
@@ -58,46 +59,46 @@ namespace IT
 				j--;
 				continue;
 			}
-			std::cout << std::setfill('0') << std::setw(4) << std::right << j << " | ";
-			std::cout << std::setfill(' ') << std::setw(13) << std::left << idtable.table[i].id << " | ";
+			*stream << std::setfill('0') << std::setw(4) << std::right << j << " | ";
+			*stream << std::setfill(' ') << std::setw(13) << std::left << idtable.table[i].id << " | ";
 			switch (idtable.table[i].iddatatype)
 			{
-			case INT: std::cout << std::setw(10) << std::left;
-				if (idtable.table[i].idtype == OP) std::cout << "-" << " | ";
-				else std::cout << "number" << " | "; break;
-			case STR: std::cout << std::setw(10) << std::left;
-				if (idtable.table[i].idtype == OP) std::cout << "-" << " | ";
-				else std::cout << "text" << " | "; break;
-			case BL: std::cout << std::setw(10) << std::left;
-				if (idtable.table[i].idtype == OP) std::cout << "-" << " | ";
-				else std::cout << "boolean" << " | "; break;
-			default: std::cout << std::setw(10) << std::left << "unknown" << " | "; break;
+			case INT: *stream << std::setw(10) << std::left;
+				if (idtable.table[i].idtype == OP) *stream << "-" << " | ";
+				else *stream << "number" << " | "; break;
+			case STR: *stream << std::setw(10) << std::left;
+				if (idtable.table[i].idtype == OP) *stream << "-" << " | ";
+				else *stream << "text" << " | "; break;
+			case BL: *stream << std::setw(10) << std::left;
+				if (idtable.table[i].idtype == OP) *stream << "-" << " | ";
+				else *stream << "boolean" << " | "; break;
+			default: *stream << std::setw(10) << std::left << "unknown" << " | "; break;
 			}
 			switch (idtable.table[i].idtype)
 			{
-			case V: std::cout << std::setw(18) << std::left << "переменная" << " | "; break;
-			case F: std::cout << std::setw(18) << std::left << "функция" << " | "; break;
-			case P: std::cout << std::setw(18) << std::left << "параметр" << " | "; break;
-			case L: std::cout << std::setw(18) << std::left << "литерал" << " | "; break;
-			case SF:  std::cout << std::setw(18) << std::left << "стандартная функция" << " | "; break;
-			case OP: std::cout << std::setw(18) << std::left << "оператор" << " | ";
+			case V: *stream << std::setw(18) << std::left << "переменная" << " | "; break;
+			case F: *stream << std::setw(18) << std::left << "функция" << " | "; break;
+			case P: *stream << std::setw(18) << std::left << "параметр" << " | "; break;
+			case L: *stream << std::setw(18) << std::left << "литерал" << " | "; break;
+			case SF:  *stream << std::setw(18) << std::left << "стандартная функция" << " | "; break;
+			case OP: *stream << std::setw(18) << std::left << "оператор" << " | ";
 				numberOP++;
 				break;
-			default: std::cout << std::setw(18) << std::left << "unknown" << " | "; break;
+			default: *stream << std::setw(18) << std::left << "unknown" << " | "; break;
 			}
-			std::cout << std::setw(11) << std::left << idtable.table[i].idxfirstLE << " | ";
+			*stream << std::setw(11) << std::left << idtable.table[i].idxfirstLE << " | ";
 			if (idtable.table[i].iddatatype == INT && (idtable.table[i].idtype == V || idtable.table[i].idtype == L))
-				std::cout << std::setw(18) << std::left << idtable.table[i].value.vint;
+				*stream << std::setw(18) << std::left << idtable.table[i].value.vint;
 			else if (idtable.table[i].iddatatype == STR && (idtable.table[i].idtype == V || idtable.table[i].idtype == L))
-				std::cout << "[" << idtable.table[i].value.vstr.len << "]\"" << idtable.table[i].value.vstr.str << "\"";
+				*stream << "[" << idtable.table[i].value.vstr.len << "]\"" << idtable.table[i].value.vstr.str << "\"";
 			else if (idtable.table[i].iddatatype == BL && (idtable.table[i].idtype == V || idtable.table[i].idtype == L))
-				std::cout << std::setw(18) << std::left << idtable.table[i].value.vbool;
+				*stream << std::setw(18) << std::left << idtable.table[i].value.vbool;
 			else
-				std::cout << "-";
-			std::cout << std::endl;
+				*stream << "-";
+			*stream << std::endl;
 		}
-		std::cout << std::setfill('-') << std::setw(87) << '-' << std::endl;
-		std::cout << "Количество идентификаторов: " << i - numberOP << std::endl;
-		std::cout << std::setw(87) << '-' << std::endl;
+		*stream << std::setfill('-') << std::setw(87) << '-' << std::endl;
+		*stream << "Количество идентификаторов: " << i - numberOP << std::endl;
+		*stream << std::setw(87) << '-' << std::endl;
 	}
 };

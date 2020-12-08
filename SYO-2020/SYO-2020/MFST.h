@@ -3,6 +3,7 @@
 #include "Greibach.h"
 #include "LT.h"
 #include <iomanip>
+#include "Log.h"
 
 //template <class Type>
 //class allocator;
@@ -28,34 +29,34 @@ static char rbuf[205], sbuf[205], lbuf[1024];
 
 
 
-#define MFST_TRACE_START std::cout<< std::setw(4)<<std::left<<"Шаг"<<":"\
+#define MFST_TRACE_START(LOG) *log.stream<< std::setw(4)<<std::left<<"Шаг"<<":"\
 								  << std::setw(20)<<std::left<<" Правило"\
 								  << std::setw(30)<<std::left<<" Входная лента"\
 								  << std::setw(20)<<std::left<<" Стек"\
 								  << std::endl;
 
-#define MFST_TRACE1		 std::cout<< std::setw(4)<<std::left<<++FST_TRACE_n<<": "\
+#define MFST_TRACE1(LOG)		 *log.stream<< std::setw(4)<<std::left<<++FST_TRACE_n<<": "\
 								  << std::setw(20)<<std::left<<rule.getCRule(rbuf,nrulechain)\
 								  << std::setw(30)<<std::left<<getCLenta(lbuf,lenta_position)\
 								  << std::setw(20)<<std::left<<getCSt(sbuf)\
 								  << std::endl;
 
-#define MFST_TRACE2		 std::cout<< std::setw(4)<<std::left<<FST_TRACE_n<<": "\
+#define MFST_TRACE2(LOG)		 *log.stream<< std::setw(4)<<std::left<<FST_TRACE_n<<": "\
 								  << std::setw(20)<<std::left<<" "\
 								  << std::setw(30)<<std::left<<getCLenta(lbuf,lenta_position)\
 								  << std::setw(20)<<std::left<<getCSt(sbuf)\
 								  << std::endl;
 
-#define MFST_TRACE3		 std::cout<< std::setw(4)<<std::left<<++FST_TRACE_n<<": "\
+#define MFST_TRACE3(LOG)		 *log.stream<< std::setw(4)<<std::left<<++FST_TRACE_n<<": "\
 								  << std::setw(20)<<std::left<<" "\
 								  << std::setw(30)<<std::left<<getCLenta(lbuf,lenta_position)\
 								  << std::setw(20)<<std::left<<getCSt(sbuf)\
 								  << std::endl;
 
-#define MFST_TRACE4(c)		std::cout<<std::setw(4)<<std::left << ++FST_TRACE_n << ": "<<std::setw(20)<< std::left <<c<<std::endl;
-#define MFST_TRACE5(c)		std::cout<<std::setw(4)<<std::left << FST_TRACE_n << ": "<<std::setw(20)<< std::left <<c<<std::endl;
-#define MFST_TRACE6(c,k)	std::cout<<std::setw(4)<<std::left << FST_TRACE_n << ": "<<std::setw(20)<< std::left << c << k <<std::endl;
-#define MFST_TRACE7			std::cout<<std::setw(4)<<std::left << state.lenta_position << ": "\
+#define MFST_TRACE4(LOG, c)		*log.stream<<std::setw(4)<<std::left << ++FST_TRACE_n << ": "<<std::setw(20)<< std::left <<c<<std::endl;
+#define MFST_TRACE5(LOG, c)		*log.stream<<std::setw(4)<<std::left << FST_TRACE_n << ": "<<std::setw(20)<< std::left <<c<<std::endl;
+#define MFST_TRACE6(LOG, c,k)	*log.stream<<std::setw(4)<<std::left << FST_TRACE_n << ": "<<std::setw(20)<< std::left << c << k <<std::endl;
+#define MFST_TRACE7			*log.stream<<std::setw(4)<<std::left << state.lenta_position << ": "\
 							<<std::setw(20)<< std::left << rule.getCRule(rbuf,state.nrulechain)\
 							<<std::endl;
 
@@ -117,13 +118,13 @@ namespace MFST
 		char* getCSt(char* buf);			//получить содержимое стека
 		char* getCLenta(char* buf, short pos, short n = 25);	//лента: n символов с pos
 		char* getDiagnosis(short n, char* buf);					//получить n-ю строку диагностики или 0х00
-		bool savestate();					//сохранить состояние автомата
-		bool resetstate();					//восстановить состояние автомата
+		bool savestate(const Log::LOG& log);					//сохранить состояние автомата
+		bool resetstate(const Log::LOG& log);					//восстановить состояние автомата
 		bool push_chain(GRB::Rule::Chain chain);		//поместить цепочку правила в стек
-		RC_STEP step();						//выполнить шаг автомата
-		bool start();						//запустить автомат
+		RC_STEP step(const Log::LOG& log);						//выполнить шаг автомата
+		bool start(const Log::LOG& log);						//запустить автомат
 		bool savediagnosis(RC_STEP pprc_step);			//код завершения шага
-		void printrules();					//вывести послдеовательность правил
+		void printrules(const Log::LOG& log);					//вывести послдеовательность правил
 
 		struct Deducation
 		{

@@ -78,7 +78,9 @@ string genConditionCode(Lex::LEX& tables, int i, string& cyclecode)
 
 	for (int j = i + 5; LEXEMA(j) != LEX_LOGSEP; j++) // пропустили открывающую решетку
 	{
-		if (LEXEMA(j) == LEX_CYCLE) c = true;
+		if (LEXEMA(j) == LEX_TSTATE) r = true;
+		if (LEXEMA(j) == LEX_FSTATE) w = true;
+		if (LEXEMA(j) == LEX_REPEAT) c = true;
 	}
 	str = str + "mov edx, " + lft.id + "\ncmp edx, " + rgt.id + "\n";
 	switch (LEXEMA(i + 2))
@@ -89,8 +91,8 @@ string genConditionCode(Lex::LEX& tables, int i, string& cyclecode)
 	case LEX_IFEQ:    rstr = "jz";  wstr = "jnz";  break;
 	}
 
-	if (!c && r) str = str + "\n" + rstr + " right" + char(conditionnum + '0');
-	if (!c && w) str = str + "\n" + wstr + " wrong" + char(conditionnum + '0');
+	if (!c && r) str = str + "\n" + rstr + " right" + itoS(conditionnum);
+	if (!c && w) str = str + "\n" + wstr + " wrong" + itoS(conditionnum);
 	if (c)
 	{
 		str = str + "\n" + rstr + " cycle" + itoS(conditionnum);
@@ -103,13 +105,19 @@ string genConditionCode(Lex::LEX& tables, int i, string& cyclecode)
 vector <string> startFillVector(Lex::LEX& tables)
 {
 	vector<string> v;
-	v.push_back(BEGIN);
+	v.push_back(BEGIN);									//Дальше костыль для динамического подключения библиотеки (В лучшем случае исправить)
+	string str = __FILE__;
+	string str2 = str.erase(str.length() - 22, 22);
+	string str3 = "Generation\\Debug\\GenLib.lib";
+	str2.append(str3);
+	string str4 = "includelib \"" + str2;
+	v.push_back(str4);
 	v.push_back(EXTERN);
 
 	vector<string> vlt; vlt.push_back(CONST);
 	vector<string> vid; vid.push_back(DATA);
 
-	for (int i = 0; i < tables.idtable.size; i++)
+	for (int i = 0; i < tables.idtable.size; i++)				//Заполнение сегментов 
 	{
 		IT::Entry e = tables.idtable.table[i];
 		string str = "\t\t" + string(e.id);
@@ -127,8 +135,8 @@ vector <string> startFillVector(Lex::LEX& tables)
 		{
 			switch (e.iddatatype)
 			{
-			case IT::IDDATATYPE::INT: str = str + " sdword 0";  break;
-			case IT::IDDATATYPE::STR: str = str + " dword ?";  break;
+			case IT::IDDATATYPE::INT: str = str + " sdword 0";  break;				//Если целочисл
+			case IT::IDDATATYPE::STR: str = str + " dword ?";  break;				//Если строка
 			}
 			vid.push_back(str);
 		}
@@ -161,7 +169,7 @@ string genFunctionCode(Lex::LEX& tables, int i, string funcname, int pcount)
 
 	return str;
 }
-string genExitCode(Lex::LEX& tables, int i, string funcname, int pcount)
+string genExitCode(Lex::LEX& tables, int i, string funcname, int pcount)		//Генерация кода выхода
 {
 	string str = "; --- restore registers ---\npop edx\npop ebx\n; -------------------------\n";
 	if (LEXEMA(i + 1) != LEX_SEMICOLON)	// выход из функции (вернуть значение)
@@ -241,7 +249,7 @@ namespace Gen
 	void CodeGeneration(Lex::LEX& tables)
 	{
 		vector<string> v = startFillVector(tables);
-		ofstream ofile("D:\\User\\Desktop\\Курсач\\SYO-2020\\Generation\\Generation\\Gen.asm");
+		ofstream ofile("D:\\User\\Desktop\\CourseWork\\SYO-2020\\Generation\\Generation\\Gen.asm");
 		string funcname;	// имя текущей функции
 		string cyclecode;	// эпилог цикла: cmp + j
 		int pcount;			// количество параметров текущей функции
@@ -275,23 +283,43 @@ namespace Gen
 				while (LEXEMA(++i) != LEX_SEMICOLON);	// пропускаем выражение
 				break;
 			}
-			case LEX_CONDITION: // условие
+			case LEX_STATE: // условие
 			{
 				str = genConditionCode(tables, i, cyclecode);
 				break;
 			}
-			case LEX_LOGSEP:		// поставить метки в конце кондишна
+			case LEX_BRACELET:	// переход на метку в конце кондишна
+			{
+				if (LEXEMA(i + 1) == LEX_TSTATE || LEXEMA(i + 1) == LEX_FSTATE)
+					str = str + "jmp next" + itoS(conditionnum);
+			}
+			case LEX_LOGSEP:		// Метки в конце стэйта для цикла 
 			{
 				if (LEXEMA(i - 1) == LEX_BRACELET) //   ]#
 				{
 					bool c = false;
-					for (int j = i; j > 0 && LEXEMA(j) != LEX_CONDITION; j--)
-						if (LEXEMA(j) == LEX_CYCLE)
+					for (int j = i; j > 0 && LEXEMA(j) != LEX_STATE; j--)
+						if (LEXEMA(j) == LEX_REPEAT)
 							c = true;
 					if (c)
 						str = cyclecode + "\ncyclenext" + itoS(conditionnum) + ":";
 					else  str += "next" + itoS(conditionnum) + ':';
 				}
+				break;
+			}
+			case LEX_TSTATE: // условие верно(метка)
+			{
+				str = str + "right" + itoS(conditionnum) + ":";
+				break;
+			}
+			case LEX_FSTATE: // условие неверно(метка)
+			{
+				str = str + "wrong" + itoS(conditionnum) + ":";
+				break;
+			}
+			case LEX_PRINTLINE:
+			{
+				str = str + "push offset printline\ncall outstr\n";
 				break;
 			}
 			case LEX_PRINT: // вывод
@@ -310,7 +338,7 @@ namespace Gen
 				str = str + "\n";
 				break;
 			}
-			case LEX_CYCLE: // цикл с условием (метка)
+			case LEX_REPEAT: // цикл с условием (метка)
 			{
 				str = str + "cycle" + itoS(conditionnum) + ":";
 				break;

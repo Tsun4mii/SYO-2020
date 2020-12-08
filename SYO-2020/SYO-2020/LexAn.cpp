@@ -88,9 +88,6 @@ namespace Lex
 			if (FST::execute(fstSqroot) || FST::execute(fstMod))
 			{
 				findFunc = true;
-				// ????? ?????? ??
-				//if (word[i - 1] == "func")
-				//	throw ERROR_THROW_IN(319, line, position);
 				if (findFunc)	// ???? ???????
 				{
 					int idx = IT::IsId(idtable, word[i]);	// ???? ??? ????????
@@ -142,17 +139,31 @@ namespace Lex
 				findDec = true;
 				continue;
 			}
-			FST::FST fstCycle(word[i], FST_CYCLE);
+			FST::FST fstCycle(word[i], FST_REPEAT);
 			if (FST::execute(fstCycle))
 			{
-				LT::Entry entryLT = writeEntry(entryLT, LEX_CYCLE, LT_TI_NULLIDX, line);
+				LT::Entry entryLT = writeEntry(entryLT, LEX_REPEAT, LT_TI_NULLIDX, line);
 				LT::Add(lextable, entryLT);
 				continue;
 			}
-			FST::FST fstCondition(word[i], FST_CONDITION);
+			FST::FST fstCondition(word[i], FST_STATE);
 			if (FST::execute(fstCondition))
 			{
-				LT::Entry entryLT = writeEntry(entryLT, LEX_CONDITION, LT_TI_NULLIDX, line);
+				LT::Entry entryLT = writeEntry(entryLT, LEX_STATE, LT_TI_NULLIDX, line);
+				LT::Add(lextable, entryLT);
+				continue;
+			}
+			FST::FST fstTrueS(word[i], FST_TSTATE);
+			if (FST::execute(fstTrueS))
+			{
+				LT::Entry entryLT = writeEntry(entryLT, LEX_TSTATE, LT_TI_NULLIDX, line);
+				LT::Add(lextable, entryLT);
+				continue;
+			}
+			FST::FST fstFalseS(word[i], FST_FSTATE);
+			if (FST::execute(fstFalseS))
+			{
+				LT::Entry entryLT = writeEntry(entryLT, LEX_FSTATE, LT_TI_NULLIDX, line);
 				LT::Add(lextable, entryLT);
 				continue;
 			}
@@ -215,6 +226,13 @@ namespace Lex
 				LT::Add(lextable, entryLT);
 				continue;
 			}
+			FST::FST fstPrintline(word[i], FST_PRINTLINE);
+			if (FST::execute(fstPrintline))
+			{
+				LT::Entry entryLT = writeEntry(entryLT, LEX_PRINTLINE, LT_TI_NULLIDX, line);
+				LT::Add(lextable, entryLT);
+				continue;
+			}
 			FST::FST fstMain(word[i], FST_MAIN);
 			if (FST::execute(fstMain))
 			{
@@ -236,6 +254,8 @@ namespace Lex
 					int idx = IT::IsId(idtable, word[i]);	// ???? ??? ????????
 					if (idx != TI_NULLIDX)		// ???? ????? ????????????? ??? ????
 					{
+						if(!strcmp(word[i-1],"func"))
+							throw ERROR_THROW_IN(305, line, position);
 						LT::Entry entryLT = writeEntry(entryLT, LEX_ID, idx, line);
 						LT::Add(lextable, entryLT);
 						findFunc = false;
@@ -245,8 +265,8 @@ namespace Lex
 				else
 				{
 					int idx = IT::IsId(idtable, word[i]);	// ???? ??? ????????, ? ????? ? ?????????
-					//if (idx == TI_NULLIDX && findDec == true && findType == false)
-					//	throw ERROR_THROW_IN(123, line, position);
+					if (idx == TI_NULLIDX && findDec == true && findType == false)
+						throw ERROR_THROW_IN(303, line, position);
 					if (idx != TI_NULLIDX)		// ???? ????? ????????????? ??? ????
 					{
 						if (findDec == true)				//???????? ?? ????????? ??????????
@@ -608,7 +628,7 @@ namespace Lex
 				indxLex--;
 				continue;
 			}
-			int countSk = 0;
+			/*int countSk = 0;
 			if (word[i][0] == '\'') {
 				for (int j = 0; j < strlen(word[i]); j++)
 				{
@@ -619,8 +639,8 @@ namespace Lex
 					break;
 				}
 			}
-			else
-				throw ERROR_THROW_IN(108, line, position);
+			else*/
+			throw ERROR_THROW_IN(108, line, position);
 		}
 		for (int j = 0; j < idtable.size; j++)
 		{

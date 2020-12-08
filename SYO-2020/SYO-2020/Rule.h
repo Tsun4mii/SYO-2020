@@ -109,11 +109,11 @@ namespace GRB
 		),
 
 		Rule(NS('R'), GRB_ERROR_SERIES + 7, 5,					// Ошибка при констуировании цикла/условного выражения	
-			Rule::Chain(3, TS('r'), NS('Y'), TS('#')),
+			Rule::Chain(3, TS('u'), NS('Y'), TS('#')),
 			Rule::Chain(3, TS('w'), NS('Y'), TS('#')),
 			Rule::Chain(3, TS('c'), NS('Y'), TS('#')),
-			Rule::Chain(5, TS('r'), NS('Y'), TS('w'), NS('Y'), TS('#')),
-			Rule::Chain(5, TS('w'), NS('Y'), TS('r'), NS('Y'), TS('#'))
+			Rule::Chain(5, TS('u'), NS('Y'), TS('w'), NS('Y'), TS('#')),
+			Rule::Chain(5, TS('w'), NS('Y'), TS('u'), NS('Y'), TS('#'))
 		),
 
 		Rule(NS('Y'), GRB_ERROR_SERIES + 8, 1,					// Ошибка в теле цикла/условного выражения			

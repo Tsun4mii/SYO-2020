@@ -26,8 +26,8 @@
 #define LEX_DIRSLASH	'/'	// лексема для /
 #define LEX_OPERATOR	'v'	// лексема для операторов
 #define LEX_EQUAL		'='
-#define LEX_CYCLE		'c'
-#define LEX_CONDITION	'?'
+#define LEX_REPEAT		'c'
+#define LEX_STATE		'?'
 #define LEX_LOGSEP		'#'
 #define LEX_MREQUAL		'}'
 #define LEX_LSEQUAL		'{'
@@ -35,8 +35,10 @@
 #define LEX_LESS		'<'
 #define LEX_NOT			'!'
 #define LEX_BOOL		't'
-#define LEX_CALL		'^'
+#define LEX_PRINTLINE	'^'
 #define LEX_IFEQ		'&'
+#define LEX_TSTATE		'u'
+#define LEX_FSTATE		'w'
 
 namespace LT {
 	struct Entry {
@@ -57,5 +59,5 @@ namespace LT {
 	Entry GetEntry(LexTable& lextable, int n);
 	void Delete(LexTable& lextable);
 	Entry writeEntry(Entry& entry, char lexema, int indx, int line);
-	void showTable(LexTable lextable, Parm::PARM parm);
+	void showTable(LexTable lextable, /*Parm::PARM parm*/ std::ofstream* stream);
 }

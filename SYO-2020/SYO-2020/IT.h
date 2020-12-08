@@ -59,5 +59,5 @@ namespace IT			// таблица идентификаторов
 	);
 
 	void Delete(IdTable& idtable);	// удалить таблицу лексем (освободить память)
-	void showTable(IdTable& idtable);
+	void showTable(IdTable& idtable, std::ofstream* stream);
 };

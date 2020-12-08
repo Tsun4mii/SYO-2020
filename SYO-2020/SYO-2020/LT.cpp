@@ -46,18 +46,20 @@ namespace LT
 		return entry;
 	}
 
-	void showTable(LexTable lextable, Parm::PARM parm)		// вывод таблицы лексем
+	void showTable(LexTable lextable, /*Parm::PARM parm*/std::ofstream* stream)		// вывод таблицы лексем
 	{
-		ofstream out(parm.out);
+		*stream << "--------------------------Таблица лексем-----------------------" << endl;
+		//ofstream out(parm.out);
 		for (int i = 0; i < lextable.size; i++)
 		{
 			if (lextable.table[i].lexema == ';' || lextable.table[i].lexema == '#')
 			{
-				out << lextable.table[i].lexema << endl;
+				/*out*/*stream << lextable.table[i].lexema << endl;
 			}
 			else
-				out << lextable.table[i].lexema;
+				/*out*/*stream << lextable.table[i].lexema;
 		}
-		out.close();
+		*stream << "---------------------------------------------------------------" << endl;
+		//out.close();
 	}
 }

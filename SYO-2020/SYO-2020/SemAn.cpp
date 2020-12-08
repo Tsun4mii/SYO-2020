@@ -94,10 +94,16 @@ namespace Semantic
 			}
 			case LEX_EQUAL:
 			{
+				bool skip = false;
 				IT::IDDATATYPE mtype = tables.idtable.table[tables.lextable.table[i - 1].idxTI].iddatatype;
 				for (int j = i; tables.lextable.table[j].lexema != LEX_SEMICOLON; j++)
 				{
-					if (tables.lextable.table[j].lexema == LEX_ID || tables.lextable.table[j].lexema == LEX_LITERAL)
+					if (tables.lextable.table[j].lexema == LEX_LEFTTHESIS)
+						while (tables.lextable.table[j].lexema != LEX_RIGHTTHESIS)
+						{
+							j++;
+						}
+					if ((tables.lextable.table[j].lexema == LEX_ID || tables.lextable.table[j].lexema == LEX_LITERAL))
 					{
 						if (mtype != tables.idtable.table[tables.lextable.table[j].idxTI].iddatatype)
 						{

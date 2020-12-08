@@ -29,30 +29,47 @@ int wmain(int argc, wchar_t* argv[])
 		Log::WriteParm(log, parm);
 		In::IN in = In::getin(parm);
 		Log:WriteIn(log, in);
+		std::cout << "Старт лексического анализа..." << std::endl;
 		Lex::LEX lex = Lex::lexAnaliz(log, in);
-		MFST_TRACE_START
+		LT::showTable(lex.lextable, /*parm*/log.stream);
+		std::cout << "Лексический анализ завершен успешно..." << std::endl;
+		std::cout << "Старт синтаксического анализа..." << std::endl;
+		MFST_TRACE_START(log)
 		unsigned int start_time = clock();
 		MFST::Mfst mfst(lex.lextable, GRB::getGreibach());
-		mfst.start();
+		bool syntax_ok = mfst.start(log);
 		unsigned int end_time = clock();
 		unsigned int search_time = end_time - start_time;
 		std::cout << search_time << std::endl;
 		mfst.savededucation();
-		mfst.printrules();
+		mfst.printrules(log);
+		if (!syntax_ok)
+		{
+			std::cout << "Ошибка в ходе синтаксического анализа. Подробную информацию смотрите в логе" << std::endl;
+			return 0;
+		}
+		std::cout << "Синтаксический анализ прошел успешно..." << std::endl;
+		std::cout << "Старт семантического анализа..." << std::endl;
 		bool sem_ok = Semantic::semanticsCheck(lex, log);
 		if (!sem_ok)
 		{
 			std::cout << "Ошибка семантического анализа" << std::endl;
 		}
-		IT::showTable(lex.idtable);
+		std::cout << "Семантический анализ прошел успешно..." << std::endl;
+		IT::showTable(lex.idtable, log.stream);
+		std::cout << "Старт генерации польской записи..." << std::endl;
 		PolishStart(lex);
-		LT::showTable(lex.lextable, parm);
-		for (int i = 0; i < lex.idtable.size; i++)
-		{
-				std::cout << lex.idtable.table[i].countOfPar;
-		}
+		std::cout << "Польская запись построена..." << std::endl;
+		LT::showTable(lex.lextable, /*parm*/log.stream);
+		//for (int i = 0; i < lex.idtable.size; i++)
+		//{
+		//		std::cout << lex.idtable.table[i].countOfPar;
+		//}
+		std::cout << "Старт генерации кода..." << std::endl;
 		Gen::CodeGeneration(lex);
+		std::cout << "Генерация кода закончена..." << std::endl;
 		Log::Close(log);
+		/*system("start D:\\User\\Desktop\\CourseWork\\SYO-2020\\Generation\\Generation\\compile.bat");*/
 	}
 	catch (Error::ERROR e)
 	{

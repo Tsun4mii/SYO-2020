@@ -10,6 +10,37 @@
 //	FST::NODE(1, FST::RELATION('r', 6)),\
 //	FST::NODE(1, FST::RELATION('e', 7)),\
 //	FST::NODE()
+#define FST_TSTATE 7, \
+	FST::NODE(1, FST::RELATION('t', 1)), \
+	FST::NODE(1, FST::RELATION('r', 2)), \
+	FST::NODE(1, FST::RELATION('u', 3)), \
+	FST::NODE(1, FST::RELATION('e', 4)), \
+	FST::NODE(1, FST::RELATION('s', 5)), \
+	FST::NODE(1, FST::RELATION('t', 6)), \
+	FST::NODE()
+
+#define FST_FSTATE 8, \
+	FST::NODE(1, FST::RELATION('f', 1)), \
+	FST::NODE(1, FST::RELATION('a', 2)), \
+	FST::NODE(1, FST::RELATION('l', 3)), \
+	FST::NODE(1, FST::RELATION('s', 4)), \
+	FST::NODE(1, FST::RELATION('e', 5)), \
+	FST::NODE(1, FST::RELATION('s', 6)), \
+	FST::NODE(1, FST::RELATION('t', 7)), \
+	FST::NODE()
+
+#define FST_PRINTLINE 10, \
+	FST::NODE(1, FST::RELATION('p', 1)), \
+	FST::NODE(1, FST::RELATION('r', 2)), \
+	FST::NODE(1, FST::RELATION('i', 3)), \
+	FST::NODE(1, FST::RELATION('n', 4)), \
+	FST::NODE(1, FST::RELATION('t', 5)), \
+	FST::NODE(1, FST::RELATION('l', 6)), \
+	FST::NODE(1, FST::RELATION('i', 7)), \
+	FST::NODE(1, FST::RELATION('n', 8)), \
+	FST::NODE(1, FST::RELATION('e', 9)), \
+	FST::NODE() 
+
 #define FST_NEW 4,	\
 	FST::NODE(1, FST::RELATION('n', 1)), \
 	FST::NODE(1, FST::RELATION('e', 2)), \
@@ -206,25 +237,22 @@
 	FST::NODE(1, FST::RELATION('#', 1)), \
 	FST::NODE()
 
-#define FST_CONDITION 11,	\
-	FST::NODE(1, FST::RELATION('c', 1)), \
-	FST::NODE(1, FST::RELATION('o', 2)), \
-	FST::NODE(1, FST::RELATION('n', 3)), \
-	FST::NODE(1, FST::RELATION('d', 4)), \
-	FST::NODE(1, FST::RELATION('i', 5)), \
-	FST::NODE(1, FST::RELATION('t', 6)), \
-	FST::NODE(1, FST::RELATION('i', 7)), \
-	FST::NODE(1, FST::RELATION('o', 8)), \
-	FST::NODE(1, FST::RELATION('n', 9)), \
-	FST::NODE(1, FST::RELATION(':', 10)), \
+#define FST_STATE 7,	\
+	FST::NODE(1, FST::RELATION('s', 1)), \
+	FST::NODE(1, FST::RELATION('t', 2)), \
+	FST::NODE(1, FST::RELATION('a', 3)), \
+	FST::NODE(1, FST::RELATION('t', 4)), \
+	FST::NODE(1, FST::RELATION('e', 5)), \
+	FST::NODE(1, FST::RELATION(':', 6)), \
 	FST::NODE()
 
-#define FST_CYCLE 6,	\
-	FST::NODE(1, FST::RELATION('c', 1)), \
-	FST::NODE(1, FST::RELATION('y', 2)), \
-	FST::NODE(1, FST::RELATION('c', 3)), \
-	FST::NODE(1, FST::RELATION('l', 4)), \
-	FST::NODE(1, FST::RELATION('e', 5)), \
+#define FST_REPEAT 7,	\
+	FST::NODE(1, FST::RELATION('r', 1)), \
+	FST::NODE(1, FST::RELATION('e', 2)), \
+	FST::NODE(1, FST::RELATION('p', 3)), \
+	FST::NODE(1, FST::RELATION('e', 4)), \
+	FST::NODE(1, FST::RELATION('a', 5)), \
+	FST::NODE(1, FST::RELATION('t', 6)), \
 	FST::NODE()
 
 

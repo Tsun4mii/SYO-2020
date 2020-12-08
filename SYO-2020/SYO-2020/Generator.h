@@ -14,11 +14,13 @@
 ".model flat, stdcall\n"\
 "includelib libucrt.lib\n"\
 "includelib kernel32.lib\n"\
-"includelib \"../Debug/GenLib.lib\n"\
-"ExitProcess PROTO:DWORD \n"\
-".stack 4096\n"
+//"includelib \""\
+//"includelib \"../Debug/GenLib.lib\n"\
 
-#define EXTERN "\n outnum PROTO : DWORD\n"\
+
+#define EXTERN "ExitProcess PROTO:DWORD \n"\
+".stack 4096\n"\
+"\n outnum PROTO : DWORD\n"\
 "\n outstr PROTO : DWORD\n"\
 "\n sqroot PROTO : DWORD\n"\
 "\n module PROTO : DWORD\n"\
@@ -29,7 +31,7 @@
 #define LEXEMA(x)   tables.lextable.table[x].lexema
 
 
-#define CONST ".const\n\t\tnewline byte 13, 10, 0"
+#define CONST ".const\n\t\tprintline byte 13, 10, 0"
 #define DATA ".data\n\t\ttemp sdword ?\n\t\tbuffer byte 256 dup(0)"
 #define CODE ".code"
 

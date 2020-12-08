@@ -1,8 +1,8 @@
 number func fb(number t, number n)
 [
   t = 3 * (n + 5);
-  condition: t < 20 #
-  cycle [
+  state: t < 20 #
+  repeat [
    t = t + 2;
   ] #
   return t;
@@ -17,13 +17,13 @@ number func fc(number p)
 main
 [
   new number z;
-  new number x = 100;
+  new number x = q100;
   new number y = 3;
   new number f = -75;
   new text a;
-  a = 'hello world';
-  condition: y < 150 #
-  cycle [
+  a = 'привет мир';
+  state: y < 150 #
+  repeat [
    print ' ';
    print y;
    y = y + 15;
@@ -31,14 +31,18 @@ main
   z = sqroot(x);
   z = fb(x, y);
   print a;
+  printline;
   new text sb = '123456798';
   new text sc;
   sc = '123456798';
   y = y / 2;
   f = module(f);
   print y;
+  printline;
   print ' ';
+  printline;
   print z;
+  printline;
   print f;
 ]
 

@@ -8,7 +8,7 @@ char** divideText(char source[], int size)		// формирование массива строк, состо
 
 	bool findSP, findLit = false;
 	int j = 0;
-	char SP[] = { " ,;(){}=+-*/|" };
+	char SP[] = { " ,;(){}=+-*/|[]" };
 	for (int i = 0, k = 0; i < size - 1; i++, k++)
 	{
 		findSP = false;
