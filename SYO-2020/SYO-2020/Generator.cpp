@@ -9,33 +9,10 @@
 #include <stack>
 using namespace std;
 
-static int conditionnum = 0;
+static int statenum = 0;
 string itoS(int x) { stringstream r;  r << x;  return r.str(); }
 string genCallFunctionCode(Lex::LEX& tables, int i)
 {
-	/*string str;
-
-	IT::Entry e = ITENTRY(i);
-	stack<IT::Entry> temp;
-	bool stnd = (e.idtype == IT::IDTYPE::SF);
-
-	for (int k = i - j; k < i; k++)
-	{
-		if (LEXEMA(k) == LEX_ID || LEXEMA(k) == LEX_LITERAL)
-			temp.push(ITENTRY(k));
-	}
-
-	while (!temp.empty())
-	{
-		if (temp.top().idtype == IT::IDTYPE::L && temp.top().iddatatype == IT::IDDATATYPE::STR)
-			str = str + "push offset " + temp.top().id + "\n";
-		else   str = str + "push " + temp.top().id + "\n";
-		temp.pop();
-	}
-	if (stnd)
-		str += "push offset buffer\n";
-	str = str + "call " + string(e.id) + IN_CODE_ENDL;
-	return str;*/
 	string str;
 
 	IT::Entry e = ITENTRY(i); // идентификатор вызываемой функции
@@ -61,15 +38,13 @@ string genCallFunctionCode(Lex::LEX& tables, int i)
 	/*if (stnd)
 		str += "push offset buffer\n";*/
 	str = str + "call " + string(e.id) + IN_CODE_ENDL;
-	// выравниваниe стека
-	/*if (e.value.params.count != 0) str = str + "add esp, " + itoS(4 * e.value.params.count + 4) + "\n";*/
 
 	return str;
 }
-string genConditionCode(Lex::LEX& tables, int i, string& cyclecode)
+string genStateCode(Lex::LEX& tables, int i, string& cyclecode)
 {
 	string str;
-	conditionnum++;
+	statenum++;
 	cyclecode.clear();
 	IT::Entry lft = ITENTRY(i + 1); // левый операнд
 	IT::Entry rgt = ITENTRY(i + 3); // правый операнд
@@ -89,17 +64,19 @@ string genConditionCode(Lex::LEX& tables, int i, string& cyclecode)
 	case LEX_LESS:   rstr = "jl";  wstr = "jg";  break;
 	case LEX_NOT:   rstr = "jnz";  wstr = "jz";  break;
 	case LEX_IFEQ:    rstr = "jz";  wstr = "jnz";  break;
+	case LEX_LSEQUAL: rstr = "jbe"; wstr = "jae"; break;
+	case LEX_MREQUAL: rstr = "jae"; wstr = "jbe"; break;
 	}
 
-	if (!c && r) str = str + "\n" + rstr + " right" + itoS(conditionnum);
-	if (!c && w) str = str + "\n" + wstr + " wrong" + itoS(conditionnum);
+	if (!c && r) str = str + "\n" + rstr + " right" + itoS(statenum);
+	if (!c && w) str = str + "\n" + wstr + " wrong" + itoS(statenum);
 	if (c)
 	{
-		str = str + "\n" + rstr + " cycle" + itoS(conditionnum);
+		str = str + "\n" + rstr + " repeat" + itoS(statenum);
 		cyclecode = str;
-		str = str + "\njmp cyclenext" + itoS(conditionnum);
+		str = str + "\njmp repeatnext" + itoS(statenum);
 	}
-	else if (!r || !w)  str = str + "\njmp next" + itoS(conditionnum);
+	else if (!r || !w)  str = str + "\njmp next" + itoS(statenum);
 	return str;
 }
 vector <string> startFillVector(Lex::LEX& tables)
@@ -165,13 +142,13 @@ string genFunctionCode(Lex::LEX& tables, int i, string funcname, int pcount)
 	if (f > 0)
 		str[f] = IN_CODE_SPACE;
 
-	str += "\n; --- save registers ---\npush ebx\npush edx\n; ----------------------";
+	str += "\npush ebx\npush edx\n";
 
 	return str;
 }
 string genExitCode(Lex::LEX& tables, int i, string funcname, int pcount)		//Генерация кода выхода
 {
-	string str = "; --- restore registers ---\npop edx\npop ebx\n; -------------------------\n";
+	string str = "\npop edx\npop ebx\n";
 	if (LEXEMA(i + 1) != LEX_SEMICOLON)	// выход из функции (вернуть значение)
 	{
 		str = str + "mov eax, " + string(ITENTRY(i + 1).id) + "\n";
@@ -216,6 +193,8 @@ string genEqualCode(Lex::LEX& tables, int i)
 				str = str + "pop ebx\npop eax\nimul eax, ebx\npush eax\n"; break;
 			case LEX_DIRSLASH:
 				str = str + "pop ebx\npop eax\ncdq\nidiv ebx\npush eax\n"; break;
+			case LEX_PROC: 
+				str = str + "pop ebx \npop eax\ncdq\nidiv ebx\npush edx\n"; break;
 			}
 		} // цикл вычисления
 
@@ -228,7 +207,7 @@ string genEqualCode(Lex::LEX& tables, int i)
 		IT::Entry e2 = ITENTRY(i + 1);
 		if (lex == LEX_ID && e2.idtype == IT::IDTYPE::F) // вызов функции
 		{
-			/*str += genCallFuncCode(tables, log, i + 1);*/
+			str += genCallFunctionCode(tables, i + 1);
 			str = str + "mov " + e1.id + ", eax";
 		}
 		else if (lex == LEX_LITERAL) // литерал
@@ -267,13 +246,12 @@ namespace Gen
 			case LEX_FUNCTION:
 			{
 				funcname = ITENTRY(i + 1).id;
-				pcount = 2;
+				pcount = ITENTRY(i+1).countOfPar;
 				str = genFunctionCode(tables, i, funcname, pcount);
 				break;
 			}
 			case LEX_RETURN:
 			{
-				pcount = 2;
 				str = genExitCode(tables, i, funcname, pcount);
 				break;
 			}
@@ -285,13 +263,13 @@ namespace Gen
 			}
 			case LEX_STATE: // условие
 			{
-				str = genConditionCode(tables, i, cyclecode);
+				str = genStateCode(tables, i, cyclecode);
 				break;
 			}
 			case LEX_BRACELET:	// переход на метку в конце кондишна
 			{
 				if (LEXEMA(i + 1) == LEX_TSTATE || LEXEMA(i + 1) == LEX_FSTATE)
-					str = str + "jmp next" + itoS(conditionnum);
+					str = str + "jmp next" + itoS(statenum);
 			}
 			case LEX_LOGSEP:		// Метки в конце стэйта для цикла 
 			{
@@ -302,19 +280,19 @@ namespace Gen
 						if (LEXEMA(j) == LEX_REPEAT)
 							c = true;
 					if (c)
-						str = cyclecode + "\ncyclenext" + itoS(conditionnum) + ":";
-					else  str += "next" + itoS(conditionnum) + ':';
+						str = cyclecode + "\nrepeatnext" + itoS(statenum) + ":";
+					else  str += "next" + itoS(statenum) + ':';
 				}
 				break;
 			}
 			case LEX_TSTATE: // условие верно(метка)
 			{
-				str = str + "right" + itoS(conditionnum) + ":";
+				str = str + "right" + itoS(statenum) + ":";
 				break;
 			}
 			case LEX_FSTATE: // условие неверно(метка)
 			{
-				str = str + "wrong" + itoS(conditionnum) + ":";
+				str = str + "wrong" + itoS(statenum) + ":";
 				break;
 			}
 			case LEX_PRINTLINE:
@@ -340,7 +318,7 @@ namespace Gen
 			}
 			case LEX_REPEAT: // цикл с условием (метка)
 			{
-				str = str + "cycle" + itoS(conditionnum) + ":";
+				str = str + "repeat" + itoS(statenum) + ":";
 				break;
 			}
 			case LEX_ID:

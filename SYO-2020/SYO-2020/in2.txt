@@ -1,20 +1,51 @@
-number func fib(number n)
+number func odd(number t, number n)
 [
-  state: n & 1 #
-  truest [return 1;]
-  falsest [return fib(n-1) + fib(n-2)] #
+  new number i;
+  state: t < n #
+  repeat [
+   i = i + 1;
+   print t;
+   print ' ';
+   t = t + 2;
+  ] #
+  return i;
+]
+number func max(number a, number b)
+[
+  new number res;
+  state: a > b #
+  truest [res = a;]
+  falsest [res = b;] #
+  return res;
 ]
 main
 [
-  new number x = 3;
-  state: x < 5 #
-  truest [x = 20;] #
-  print x;
+  new number a;
+  print 'Введите число нижний предел: ';
+  a = input(a);
+  print 'Введите число верхний предел: ';
+  new number b;
+  b = input(b);
+  b = odd(a, b);
+  new number k;
+  k = max(a, b);
+  new number c = q144;
+  printline;
+  print 'Результат после вычисления выражения: ';
+  c = (c - (2 * c)) - 125;
+  print c;
+  c = module(c);
+  printline;
+  print 'Модуль результата: ';
+  print c;
+  printline;
+  print 'Квадратный корень результата: ';
+  c = sqroot(c);
+  print c;
+  printline;
+  print 'Остаток от деления на 2 результата квадратного корня: ';
+  c = c % 2;
+  print c;
 ]
-  
-  
-  
-  
-  
   
   

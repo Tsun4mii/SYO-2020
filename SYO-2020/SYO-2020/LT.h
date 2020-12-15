@@ -24,6 +24,7 @@
 #define LEX_MINUS		'-'	// лексема для -
 #define LEX_STAR		'*'	// лексема для *
 #define LEX_DIRSLASH	'/'	// лексема для /
+#define LEX_PROC		'%'
 #define LEX_OPERATOR	'v'	// лексема для операторов
 #define LEX_EQUAL		'='
 #define LEX_REPEAT		'c'
@@ -43,7 +44,7 @@
 namespace LT {
 	struct Entry {
 		char lexema;                                          //лексема
-		int sn;                                               //номер строки в исходном тексте
+		int sn;                                               
 		int idxTI;  
 		int priority;//индекс в ТИ
 	};

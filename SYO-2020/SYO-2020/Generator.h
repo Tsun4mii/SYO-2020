@@ -24,6 +24,7 @@
 "\n outstr PROTO : DWORD\n"\
 "\n sqroot PROTO : DWORD\n"\
 "\n module PROTO : DWORD\n"\
+"\n input PROTO : DWORD\n"\
 
 #define END "push 0\ncall ExitProcess\nmain ENDP\nend main"
 

@@ -29,4 +29,10 @@ extern "C"
 	{
 		return (int)std::fabs(i);
 	}
+
+	int _stdcall input(int i)
+	{
+		std::cin >> i;
+		return i;
+	}
 }

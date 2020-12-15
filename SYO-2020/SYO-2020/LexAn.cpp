@@ -42,20 +42,11 @@ namespace Lex
 			word = divideText(in.text, in.size);
 		} while (word == NULL);
 
-
-		//for (int i = 0; word[i] != NULL; i++)
-		//{
-		//	/*if (word[4][i] == '\0')
-		//		break;
-		//	else*/
-		//		cout << word[i] << endl;
-		//}
-
-		int indxLex = 0;		// ?????? ???????
-		int indexID = 0;		// ?????? ?????.
-		int clit = 1;			// ??????? ?????????
-		int line = 1;			// ????? ??????
-		int position = 0;			// ????? ??????? ? ???????? ?????
+		int indxLex = 0;		
+		int indexID = 0;		
+		int clit = 1;			
+		int line = 1;			
+		int position = 0;			
 
 		bool findMain = false;
 		int countMain = 0;
@@ -64,14 +55,14 @@ namespace Lex
 		int bufPos = 0;
 
 
-		char emptystr[] = "";	// ?????? ??????
-		char* prefix = new  char[10]{ "" };	// ??????? ???????
-		char* bufprefix = new  char[10]{ "" };	// ????? ??? ????????
-		char* oldprefix = new  char[10]{ "" };	// ?????????? ???????
+		char emptystr[] = "";	
+		char* prefix = new  char[10]{ "" };	
+		char* bufprefix = new  char[10]{ "" };	
+		char* oldprefix = new  char[10]{ "" };	
 		char* L = new  char[2]{ "L" };
 		char* bufL = new  char[TI_STR_MAXSIZE];
 		char* nameLiteral = new  char[10]{ "" };
-		char* charclit = new char[10]{ "" };		// ??? ????????? ?????? ????????
+		char* charclit = new char[10]{ "" };		
 
 		bool findFunc = false;
 		bool findParm = false;
@@ -80,18 +71,18 @@ namespace Lex
 
 		for (int i = 0; word[i] != NULL; i++, indxLex++)
 		{
-
 			bool findSameID = false;
 
+			FST::FST fstInp(word[i], FST_INPUT);
 			FST::FST fstMod(word[i], FST_MOD);
 			FST::FST fstSqroot(word[i], FST_SQROOT);
-			if (FST::execute(fstSqroot) || FST::execute(fstMod))
+			if (FST::execute(fstSqroot) || FST::execute(fstMod) || FST::execute(fstInp))
 			{
 				findFunc = true;
-				if (findFunc)	// ???? ???????
+				if (findFunc)	
 				{
-					int idx = IT::IsId(idtable, word[i]);	// ???? ??? ????????
-					if (idx != TI_NULLIDX)		// ???? ????? ????????????? ??? ????
+					int idx = IT::IsId(idtable, word[i]);	
+					if (idx != TI_NULLIDX)		
 					{
 						LT::Entry entryLT = writeEntry(entryLT, LEX_ID, idx, line);
 						LT::Add(lextable, entryLT);
@@ -101,8 +92,8 @@ namespace Lex
 				}
 				else
 				{
-					int idx = IT::IsId(idtable, word[i]);	// ???? ??? ????????, ? ????? ? ?????????
-					if (idx != TI_NULLIDX)		// ???? ????? ????????????? ??? ????
+					int idx = IT::IsId(idtable, word[i]);	
+					if (idx != TI_NULLIDX)		
 					{
 						LT::Entry entryLT = writeEntry(entryLT, LEX_ID, idx, line);
 						LT::Add(lextable, entryLT);
@@ -112,7 +103,7 @@ namespace Lex
 					strcpy(bufprefix, prefix);
 					word[i] = strcat(bufprefix, word[i]);
 					idx = IT::IsId(idtable, word[i]);
-					if (idx != TI_NULLIDX)		// ???? ????? ????????????? ??? ????
+					if (idx != TI_NULLIDX)		
 					{
 						LT::Entry entryLT = writeEntry(entryLT, LEX_ID, idx, line);
 						LT::Add(lextable, entryLT);
@@ -123,10 +114,10 @@ namespace Lex
 				LT::Add(lextable, entryLT);
 				findDec = false;
 				entryIT.idtype = IT::SF;
-				entryIT.iddatatype = IT::INT;
 				entryIT.idxfirstLE = indxLex;
 				strcpy(entryIT.id, word[i]);
 				IT::Add(idtable, entryIT);
+				entryIT.iddatatype = IT::UNDEF;
 				findFunc = false;
 				findType = false;
 				continue;
@@ -248,11 +239,11 @@ namespace Lex
 			FST::FST fstIdentif(word[i], FST_ID);
 			if (FST::execute(fstIdentif))
 			{
-				// ????? ?????? ??
-				if (findFunc)	// ???? ???????
+				
+				if (findFunc)	
 				{
-					int idx = IT::IsId(idtable, word[i]);	// ???? ??? ????????
-					if (idx != TI_NULLIDX)		// ???? ????? ????????????? ??? ????
+					int idx = IT::IsId(idtable, word[i]);	
+					if (idx != TI_NULLIDX)		
 					{
 						if(!strcmp(word[i-1],"func"))
 							throw ERROR_THROW_IN(305, line, position);
@@ -264,12 +255,12 @@ namespace Lex
 				}
 				else
 				{
-					int idx = IT::IsId(idtable, word[i]);	// ???? ??? ????????, ? ????? ? ?????????
+					int idx = IT::IsId(idtable, word[i]);	
 					if (idx == TI_NULLIDX && findDec == true && findType == false)
 						throw ERROR_THROW_IN(303, line, position);
-					if (idx != TI_NULLIDX)		// ???? ????? ????????????? ??? ????
+					if (idx != TI_NULLIDX)		
 					{
-						if (findDec == true)				//???????? ?? ????????? ??????????
+						if (findDec == true)				
 							throw ERROR_THROW_IN(305, line, position);
 						LT::Entry entryLT = writeEntry(entryLT, LEX_ID, idx, line);
 						LT::Add(lextable, entryLT);
@@ -279,9 +270,9 @@ namespace Lex
 					strcpy(bufprefix, prefix);
 					word[i] = strcat(bufprefix, word[i]);
 					idx = IT::IsId(idtable, word[i]);
-					if (idx != TI_NULLIDX)		// ???? ????? ????????????? ??? ????
+					if (idx != TI_NULLIDX)		
 					{
-						if (findDec == true)				//???????? ?? ????????? ??????????
+						if (findDec == true)				
 							throw ERROR_THROW_IN(305, line, position);
 						LT::Entry entryLT = writeEntry(entryLT, LEX_ID, idx, line);
 						LT::Add(lextable, entryLT);
@@ -291,12 +282,12 @@ namespace Lex
 				LT::Entry entryLT = writeEntry(entryLT, LEX_ID, indexID++, line);
 				LT::Add(lextable, entryLT);
 				findDec = false;
-				if (findParm) {		// ???? ????????
+				if (findParm) {		
 					entryIT.idtype = IT::P;
 					idtable.table[bufPos].countOfPar++;
 					strcpy(entryIT.visibility, prefix);
 				}
-				else if (!findFunc) {	// ???? ??????????
+				else if (!findFunc) {	
 					entryIT.idtype = IT::V;
 					strcpy(entryIT.visibility, prefix);
 					if (entryIT.iddatatype == IT::INT)
@@ -305,20 +296,16 @@ namespace Lex
 						entryIT.value.vstr.len = 0;
 						memset(entryIT.value.vstr.str, TI_STR_DEFAULT, sizeof(char));
 					}
-					if (entryIT.iddatatype == IT::BL)
-					{
-						entryIT.value.vbool = 0;
-					}
 				}
-				else {		// ???? ???????
+				else {		
 					strcpy(oldprefix, prefix);
 					strcpy(prefix, word[i]);
 					strcpy(entryIT.visibility, emptystr);
 				}
-
 				entryIT.idxfirstLE = indxLex;
 				strcpy(entryIT.id, word[i]);
 				IT::Add(idtable, entryIT);
+				entryIT.iddatatype = IT::UNDEF;
 				findFunc = false;
 				findType = false;
 				continue;
@@ -329,7 +316,7 @@ namespace Lex
 				float test = atof((char*)word[i]);
 				if (test > INT_MAX || test < INT_MIN)
 					throw ERROR_THROW_IN(313, line, position);
-				int value = atoi((char*)word[i]);	// ???????? ????????
+				int value = atoi((char*)word[i]);	
 				for (int k = 0; k < idtable.size; k++)
 				{
 					if (idtable.table[k].value.vint == value && idtable.table[k].idtype == IT::L)
@@ -340,7 +327,7 @@ namespace Lex
 						break;
 					}
 				}
-				if (findSameID)	// ???? ??? ?????? ????? ??
+				if (findSameID)	
 					continue;
 				LT::Entry entryLT = writeEntry(entryLT, LEX_LITERAL, indexID++, line);
 				LT::Add(lextable, entryLT);
@@ -348,19 +335,20 @@ namespace Lex
 				entryIT.iddatatype = IT::INT;
 				entryIT.value.vint = value;
 				entryIT.idxfirstLE = indxLex;
-				// ???????????? ????? ????????
-				_itoa_s(clit++, charclit, sizeof(char) * 10, 10);	// ??????????? ???????? ???????? ? ??????(charclit)
-				strcpy(bufL, L);	// ???????? ? ????? "L"
-				word[i] = strcat(bufL, (char*)charclit);	// ????????? ??? ??? ????????
+				
+				_itoa_s(clit++, charclit, sizeof(char) * 10, 10);	
+				strcpy(bufL, L);	
+				word[i] = strcat(bufL, (char*)charclit);	
 				strcpy(entryIT.id, word[i]);
 				IT::Add(idtable, entryIT);
+				entryIT.iddatatype = IT::UNDEF;
 				continue;
 			}
 			FST::FST fstLiteralq(word[i], FST_QLIT);
 			if (FST::execute(fstLiteralq))
 			{
-				int value = DecimalTrnsl(word[i]);	// ???????? ????????
-											// ????? ?????? ??
+				int value = DecimalTrnsl(word[i]);	
+											
 				for (int k = 0; k < idtable.size; k++)
 				{
 					if (idtable.table[k].value.vint == value && idtable.table[k].idtype == IT::L)
@@ -371,7 +359,7 @@ namespace Lex
 						break;
 					}
 				}
-				if (findSameID)	// ???? ??? ?????? ????? ??
+				if (findSameID)
 					continue;
 				LT::Entry entryLT = writeEntry(entryLT, LEX_LITERAL, indexID++, line);
 				LT::Add(lextable, entryLT);
@@ -379,12 +367,13 @@ namespace Lex
 				entryIT.iddatatype = IT::INT;
 				entryIT.value.vint = value;
 				entryIT.idxfirstLE = indxLex;
-				// ???????????? ????? ????????
-				_itoa_s(clit++, charclit, sizeof(char) * 10, 10);	// ??????????? ???????? ???????? ? ??????(charclit)
-				strcpy(bufL, L);	// ???????? ? ????? "L"
-				word[i] = strcat(bufL, (char*)charclit);	// ????????? ??? ??? ????????
+				
+				_itoa_s(clit++, charclit, sizeof(char) * 10, 10);	
+				strcpy(bufL, L);	
+				word[i] = strcat(bufL, (char*)charclit);	
 				strcpy(entryIT.id, word[i]);
 				IT::Add(idtable, entryIT);
+				entryIT.iddatatype = IT::UNDEF;
 				continue;
 			}
 			FST::FST fstLiteralString(word[i], FST_STRLIT);
@@ -406,43 +395,23 @@ namespace Lex
 						break;
 					}
 				}
-				if (findSameID)	// ???? ??? ?????? ????? ??
+				if (findSameID)	
 					continue;
 				LT::Entry entryLT = writeEntry(entryLT, LEX_LITERAL, indexID++, line);
 				LT::Add(lextable, entryLT);
-				strcpy(entryIT.value.vstr.str, word[i]);	// ?????? ???????? ?????????? ????????
-				entryIT.value.vstr.len = length - 2;		// ?????? ????? ?????????? ????????
+				strcpy(entryIT.value.vstr.str, word[i]);	
+				entryIT.value.vstr.len = length - 2;		
 				entryIT.idtype = IT::L;
 				entryIT.iddatatype = IT::STR;
 				entryIT.idxfirstLE = indxLex;
-				// ???????????? ????? ????????
-				_itoa_s(clit++, charclit, sizeof(char) * 10, 10);	// ??????????? ???????? ???????? ? ??????(charclit)
-				strcpy(bufL, L);	// ???????? ? ????? "L"
-				nameLiteral = strcat(bufL, (char*)charclit);	// ????????? ??? ??? ???????? (L + charclit)
+				_itoa_s(clit++, charclit, sizeof(char) * 10, 10);	
+				strcpy(bufL, L);	
+				nameLiteral = strcat(bufL, (char*)charclit);	
 				strcpy(entryIT.id, nameLiteral);
 				IT::Add(idtable, entryIT);
+				entryIT.iddatatype = IT::UNDEF;
 				continue;
 			}
-			/*FST::FST fstOperator(word[i], FST_OPERATOR);
-			if (FST::execute(fstOperator))
-			{
-				LT::Entry entryLT = writeEntry(entryLT, LEX_OPERATOR, indexID++, line);
-				switch (word[i][0])
-				{
-				case PLUS: case MINUS:
-					entryLT.priority = 2;
-					break;
-				case DIRSLASH: case STAR:
-					entryLT.priority = 3;
-					break;
-				}
-				LT::Add(lextable, entryLT);
-				strcpy(entryIT.id, word[i]);
-				entryIT.idxfirstLE = indxLex;
-				entryIT.idtype = IT::OP;
-				IT::Add(idtable, entryIT);
-				continue;
-			}*/
 			FST::FST fstPlus(word[i], FST_PLUS);
 			if (FST::execute(fstPlus))
 			{
@@ -453,6 +422,7 @@ namespace Lex
 				entryIT.idxfirstLE = indxLex;
 				entryIT.idtype = IT::OP;
 				IT::Add(idtable, entryIT);
+				entryIT.iddatatype = IT::UNDEF;
 				continue;
 			}
 			FST::FST fstMinus(word[i], FST_MINUS);
@@ -465,6 +435,7 @@ namespace Lex
 				entryIT.idxfirstLE = indxLex;
 				entryIT.idtype = IT::OP;
 				IT::Add(idtable, entryIT);
+				entryIT.iddatatype = IT::UNDEF;
 				continue;
 			}
 			FST::FST fstStar(word[i], FST_STAR);
@@ -477,6 +448,7 @@ namespace Lex
 				entryIT.idxfirstLE = indxLex;
 				entryIT.idtype = IT::OP;
 				IT::Add(idtable, entryIT);
+				entryIT.iddatatype = IT::UNDEF;
 				continue;
 			}
 			FST::FST fstDir(word[i], FST_DIRSLASH);
@@ -489,6 +461,20 @@ namespace Lex
 				entryIT.idxfirstLE = indxLex;
 				entryIT.idtype = IT::OP;
 				IT::Add(idtable, entryIT);
+				entryIT.iddatatype = IT::UNDEF;
+				continue;
+			}
+			FST::FST fstProc(word[i], FST_PROC);
+			if (FST::execute(fstProc))
+			{
+				LT::Entry entryLT = writeEntry(entryLT, LEX_PROC, indexID++, line);
+				entryLT.priority = 3;
+				LT::Add(lextable, entryLT);
+				strcpy(entryIT.id, word[i]);
+				entryIT.idxfirstLE = indxLex;
+				entryIT.idtype = IT::OP;
+				IT::Add(idtable, entryIT);
+				entryIT.iddatatype = IT::UNDEF;
 				continue;
 			}
 			FST::FST fstMrEqual(word[i], FST_MREQUAL);
@@ -501,6 +487,7 @@ namespace Lex
 				entryIT.idxfirstLE = indxLex;
 				entryIT.idtype = IT::OP;
 				IT::Add(idtable, entryIT);
+				entryIT.iddatatype = IT::UNDEF;
 				continue;
 			}
 			FST::FST fstLsEqual(word[i], FST_LSEQUAL);
@@ -513,6 +500,7 @@ namespace Lex
 				entryIT.idxfirstLE = indxLex;
 				entryIT.idtype = IT::OP;
 				IT::Add(idtable, entryIT);
+				entryIT.iddatatype = IT::UNDEF;
 				continue;
 			}
 			FST::FST fstMore(word[i], FST_MORE);
@@ -524,6 +512,7 @@ namespace Lex
 				entryIT.idxfirstLE = indxLex;
 				entryIT.idtype = IT::OP;
 				IT::Add(idtable, entryIT);
+				entryIT.iddatatype = IT::UNDEF;
 				continue;
 			}
 			FST::FST fstLess(word[i], FST_LESS);
@@ -536,6 +525,7 @@ namespace Lex
 				entryIT.idxfirstLE = indxLex;
 				entryIT.idtype = IT::OP;
 				IT::Add(idtable, entryIT);
+				entryIT.iddatatype = IT::UNDEF;
 				continue;
 			}
 			FST::FST fstNotEqual(word[i], FST_NOT);
@@ -608,8 +598,8 @@ namespace Lex
 			{
 				LT::Entry entryLT = writeEntry(entryLT, LEX_RIGHTTHESIS, LT_TI_NULLIDX, line);
 				entryLT.priority = 0;
-				if (findParm && word[i + 1][0] != LEX_LEFTBRACE && word[i + 2][0] != LEX_LEFTBRACE)		// ???? ????? ??????? ??? {
-					strcpy(prefix, oldprefix);		// ?????????? ?????????? ???. ?????????
+				if (findParm && word[i + 1][0] != LEX_LEFTBRACE && word[i + 2][0] != LEX_LEFTBRACE)		
+					strcpy(prefix, oldprefix);		
 				findParm = false;
 				LT::Add(lextable, entryLT);
 				continue;
@@ -628,7 +618,7 @@ namespace Lex
 				indxLex--;
 				continue;
 			}
-			/*int countSk = 0;
+			int countSk = 0;
 			if (word[i][0] == '\'') {
 				for (int j = 0; j < strlen(word[i]); j++)
 				{
@@ -639,13 +629,15 @@ namespace Lex
 					break;
 				}
 			}
-			else*/
-			throw ERROR_THROW_IN(108, line, position);
+			else {
+				throw ERROR_THROW_IN(162, line, position);
+			}
 		}
 		for (int j = 0; j < idtable.size; j++)
 		{
 			if (idtable.table[j].idtype == IT::SF)
 			{
+				idtable.table[j].iddatatype = IT::INT;
 				idtable.table[j].countOfPar = 1;
 				idtable.table[j].types = new IT::IDDATATYPE[1];
 				idtable.table[j].types[0] = IT::INT;
@@ -661,8 +653,13 @@ namespace Lex
 					idtable.table[j].types[i] = idtable.table[i].iddatatype;
 			}
 		}
+		for (int j = 0; j < idtable.size; j++)
+		{
+			if (idtable.table[j].iddatatype == IT::UNDEF && (idtable.table[j].idtype == IT::V || idtable.table[j].idtype == IT::P || idtable.table[j].idtype == IT::F))
+				throw ERROR_THROW_IN(300, lextable.table[idtable.table[j].idxfirstLE].sn, -1);
+		}
 		if (!findMain) throw ERROR_THROW(301);
-		if (countMain > 1) throw ERROR_THROW(302);
+		if (countMain > 1) throw ERROR_THROW_IN(302, line, -1);
 		lex.idtable = idtable;
 		lex.lextable = lextable;
 		return lex;

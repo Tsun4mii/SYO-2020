@@ -45,7 +45,7 @@ int wmain(int argc, wchar_t* argv[])
 		mfst.printrules(log);
 		if (!syntax_ok)
 		{
-			std::cout << "Ошибка в ходе синтаксического анализа. Подробную информацию смотрите в логе" << std::endl;
+			std::cout << "Ошибка в ходе синтаксического анализа. Подробную информацию можно увидеть в протоколе работы" << std::endl;
 			return 0;
 		}
 		std::cout << "Синтаксический анализ прошел успешно..." << std::endl;
@@ -61,19 +61,19 @@ int wmain(int argc, wchar_t* argv[])
 		PolishStart(lex);
 		std::cout << "Польская запись построена..." << std::endl;
 		LT::showTable(lex.lextable, /*parm*/log.stream);
-		//for (int i = 0; i < lex.idtable.size; i++)
-		//{
-		//		std::cout << lex.idtable.table[i].countOfPar;
-		//}
 		std::cout << "Старт генерации кода..." << std::endl;
 		Gen::CodeGeneration(lex);
 		std::cout << "Генерация кода закончена..." << std::endl;
 		Log::Close(log);
-		/*system("start D:\\User\\Desktop\\CourseWork\\SYO-2020\\Generation\\Generation\\compile.bat");*/
+		system("start D:\\User\\Desktop\\CourseWork\\SYO-2020\\compile.bat");
 	}
 	catch (Error::ERROR e)
 	{
 		Log::WriteError(log, e);
+		std::cout << "\nОшибка " << e.id
+			<< ": " << e.message
+			<< "\nСтрока " << e.inext.line
+			<< " позиция " << e.inext.col << std::endl;
 	}
 	system("pause");
 	return 0;

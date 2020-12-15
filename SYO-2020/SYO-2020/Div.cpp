@@ -1,4 +1,5 @@
 #include "Div.h"
+#include"Error.h"
 
 char** divideText(char source[], int size)		// формирование массива строк, состоящего из лексем
 {
@@ -14,6 +15,8 @@ char** divideText(char source[], int size)		// формирование массива строк, состо
 		findSP = false;
 		if (source[i] == '\'')
 			findLit = !findLit;
+		if (source[i] == '0' && source[i - 1] == '-')
+			throw ERROR_THROW(300);
 		for (int t = 0; t < sizeof(SP) - 1; t++)
 		{
 			if (source[i] == '-' && source[i - 1] == '=')
